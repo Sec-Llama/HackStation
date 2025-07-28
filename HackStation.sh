@@ -72,8 +72,6 @@ install_theharvester() {
     }
 }
 
-
-
 install_wpscan() {
     if apt-cache show wpscan >/dev/null 2>&1; then
         install_packages wpscan
