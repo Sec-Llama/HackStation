@@ -48,29 +48,41 @@ install_amass() {
 }
 
 install_theharvester() {
-    # Use the packaged version if available
-    if apt-cache show theharvester >/dev/null 2>&1; then
-        apt install -y theharvester
-        return
-    fi
-    echo "[*] Installing theHarvester via pipx..."
-    # Try to install pipx and a generic venv module via apt
-    if ! command -v pipx >/dev/null 2>&1; then
-        apt install -y pipx python3-venv || {
-            # Fall back to pip if pipx isn’t packaged
-            python3 -m pip install --user pipx --break-system-packages
+    echo "[*] Installing theHarvester using uv (official method)..."
+
+    # Fix PATH to include local bin
+    export PATH="$HOME/.local/bin:$PATH"
+
+    # Install uv if not present
+    if ! command -v uv >/dev/null 2>&1; then
+        echo "[*] Installing uv..."
+        curl -LsSf https://astral.sh/uv/install.sh | sh || {
+            echo "[-] uv installation failed."
+            return 1
         }
-        # Ensure pipx’s binary path is on PATH
-        pipx ensurepath || true
-        export PATH="$PATH:$HOME/.local/bin"
     fi
-    # Install directly from the official repository using pipx
-    # This approach avoids referencing python3.12-venv and is compatible with Python 3.11.
-    pipx install git+https://github.com/laramies/theHarvester.git || {
-        echo "[-] Failed to install theHarvester with pipx." >&2
+
+    # Clone theHarvester if not already present
+    if [ ! -d "$HOME/theHarvester" ]; then
+        echo "[*] Cloning theHarvester..."
+        git clone https://github.com/laramies/theHarvester "$HOME/theHarvester"
+    else
+        echo "[*] theHarvester already exists. Pulling updates..."
+        cd "$HOME/theHarvester" && git pull
+    fi
+
+    # Setup with uv
+    cd "$HOME/theHarvester" || return 1
+    uv venv
+    uv sync || {
+        echo "[-] Failed to install dependencies with uv."
         return 1
     }
+
+    echo "[+] theHarvester installed in $HOME/theHarvester"
+    echo "    To run: cd ~/theHarvester && uv venv run python3 theHarvester.py -d example.com -l 100"
 }
+
 
 install_wpscan() {
     if apt-cache show wpscan >/dev/null 2>&1; then
