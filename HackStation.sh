@@ -63,7 +63,8 @@ install_advanced_tools() {
     export PATH="$PATH:$GOPATH/bin"
     pipx install git+https://github.com/byt3bl33d3r/CrackMapExec.git
     pipx install git+https://github.com/fortra/impacket.git
-    pipx install git+https://github.com/aboul3la/Sublist3r.git
+    apt install sublist3r
+    # pipx install git+https://github.com/aboul3la/Sublist3r.git
     go install github.com/projectdiscovery/httpx/cmd/httpx@latest
 }
 
