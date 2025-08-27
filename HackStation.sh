@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# HackerStation Setup — Enhanced for 100% Success Rate
+# HackStation - Universal Penetration Testing Tool Installer
 # Robust error handling, multiple fallbacks, comprehensive logging
 # v1.0 (2025-08-27)
 set -euo pipefail
@@ -12,10 +12,10 @@ fi
 export DEBIAN_FRONTEND=noninteractive
 
 # ---------- Enhanced Helpers ----------
-log()     { printf "\n[+] %s\n" "$*" | tee -a /var/log/hackerstation.log; }
-warn()    { printf "\n[!] %s\n" "$*" | tee -a /var/log/hackerstation.log; }
-error()   { printf "\n[✘] %s\n" "$*" | tee -a /var/log/hackerstation.log; }
-success() { printf "\n[✔] %s\n" "$*" | tee -a /var/log/hackerstation.log; }
+log()     { printf "\n[+] %s\n" "$*" | tee -a /var/log/hackstation.log; }
+warn()    { printf "\n[!] %s\n" "$*" | tee -a /var/log/hackstation.log; }
+error()   { printf "\n[✘] %s\n" "$*" | tee -a /var/log/hackstation.log; }
+success() { printf "\n[✔] %s\n" "$*" | tee -a /var/log/hackstation.log; }
 
 # Enhanced retry mechanism
 retry() {
@@ -49,8 +49,8 @@ check_network() {
 
 # Create log file
 mkdir -p /var/log
-touch /var/log/hackerstation.log
-log "Starting HackerStation setup - $(date)"
+touch /var/log/hackstation.log
+log "Starting HackStation setup - $(date)"
 
 ARCH="$(uname -m)"
 OS="$(. /etc/os-release; echo "${ID:-debian}")"
@@ -959,7 +959,7 @@ check_tools() {
   if [ $successful -eq $total ]; then
     success "[+] 100% SUCCESS! All tools installed and working!"
   else
-    warn "[!] $failed tools still not working. Check logs at /var/log/hackerstation.log"
+    warn "[!] $failed tools still not working. Check logs at /var/log/hackstation.log"
   fi
 }
 
@@ -970,7 +970,7 @@ optimize_system() {
   # Fix common PATH issues
   cat >> /root/.bashrc << 'BASHRC_ADDITIONS'
 
-# HackerStation PATH additions
+# HackStation PATH additions
 export PATH="$PATH:/root/.local/bin:/usr/local/go/bin:/root/go/bin"
 export GOPATH="/root/go"
 
@@ -982,11 +982,11 @@ alias harvester='theHarvester'
 BASHRC_ADDITIONS
 
   # Create global profile additions
-  cat > /etc/profile.d/hackerstation.sh << 'PROFILE_ADDITIONS'
+  cat > /etc/profile.d/hackstation.sh << 'PROFILE_ADDITIONS'
 export PATH="$PATH:/root/.local/bin:/usr/local/go/bin:/root/go/bin"
 export GOPATH="/root/go"
 PROFILE_ADDITIONS
-  chmod +x /etc/profile.d/hackerstation.sh
+  chmod +x /etc/profile.d/hackstation.sh
   
   # Fix pipx issues
   if command -v pipx >/dev/null 2>&1; then
@@ -1006,34 +1006,34 @@ PROFILE_ADDITIONS
 
 usage() {
 cat <<'USAGE'
-Enhanced HackerStation Setup - 100% Success Rate
+HackStation - Universal Penetration Testing Tool Installer
 Usage:
   # Full install with optimizations (recommended)
-  ./enhanced_hackerstation.sh --all
+  ./hackstation.sh --all
 
   # Install a specific group:
-  ./enhanced_hackerstation.sh --group Recon_OSINT
+  ./hackstation.sh --group Recon_OSINT
   Groups:
     Essentials, Recon_OSINT, Web_Hacking, Password_Cracking,
     Network_Analysis, Utilities, Wordlists_Tunnels, Advanced
 
   # Install single tool with all fallback methods:
-  ./enhanced_hackerstation.sh --tool amass
-  ./enhanced_hackerstation.sh --tool bettercap
+  ./hackstation.sh --tool amass
+  ./hackstation.sh --tool bettercap
 
   # Comprehensive status check with recovery attempts
-  ./enhanced_hackerstation.sh --check
+  ./hackstation.sh --check
 
   # System optimization and PATH fixes
-  ./enhanced_hackerstation.sh --optimize
+  ./hackstation.sh --optimize
 
   # Recovery mode - attempt to fix failed installations
-  ./enhanced_hackerstation.sh --recover
+  ./hackstation.sh --recover
 
 Enhanced Features:
 - Retry mechanisms with exponential backoff
 - Multiple installation methods per tool
-- Comprehensive error logging (/var/log/hackerstation.log)
+- Comprehensive error logging (/var/log/hackstation.log)
 - Network connectivity verification  
 - Automatic recovery attempts
 - System optimization and PATH management
@@ -1128,7 +1128,7 @@ main() {
       ;;
   esac
   
-  log "HackerStation setup completed - $(date)"
+  log "HackStation setup completed - $(date)"
 }
 
 # Initialize and run
